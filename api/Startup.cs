@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,7 +27,17 @@ namespace api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc()
-                .AddXmlSerializerFormatters();
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
+                .AddXmlSerializerFormatters()
+                .AddJsonOptions(opts =>
+                {
+                    // Force Camel Case to JSON
+                    //opts.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                    //opts.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                });
+
+            //services.AddMvc()
+            //    .AddXmlSerializerFormatters();
                 
             services.AddSwaggerGen(c =>
             {
